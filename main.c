@@ -34,8 +34,26 @@ void addToList(char* nameCur, double valueCur, NODE** tail) {
 }
 
 void addSpaces(char* expression, char* expressionWithSpaces, ){
+    int counterForTime = 0;
+    int counterForSpaces = 0;
+    char timeSymbols[nameOfVariable] = {0};
     for (int i = 0; i < strlen(expression); i++){
-        if(expression[i] >= '0' && expression[i] <= '9')
+        if(expression[i] >= '0' && expression[i] <= '9'){
+            timeSymbols[counterForTime++] = expression[i];
+            while(expression[i+1] >= '0' && expression[i+1] <= '9'){
+                timeSymbols[counterForTime++] = expression[i+1];
+                i++;
+            }
+            for(int j = 0; j < counterForTime; j++){
+                expressionWithSpaces[counterForSpaces++] = timeSymbols[j];
+            }
+            counterForSpaces++;
+            counterForTime = 0;
+            strcpy(timeSymbols, "");
+        } else if(expression[i] >= 'a' && expression[i] <= 'z' || expression[i] >= 'A' && expression[i] <= 'Z'){
+            timeSymbols[counterForTime++] = expression[i];
+            while(){
+        }
     }
 }
 
