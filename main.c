@@ -15,13 +15,19 @@ struct data {
     int top;
 };
 
-
-
 typedef struct variable {
     char name[numberOfStrings];
     double value;
     struct variable* pointer;
 }NODE;
+
+void strclear(char str[]){
+    int i = 0;
+    while(str[i]){
+        str[i] = 0;
+        i++;
+    }
+}
 
 void addToList(char* nameCur, double valueCur, NODE** tail) {
     NODE* current = NULL;
@@ -33,26 +39,27 @@ void addToList(char* nameCur, double valueCur, NODE** tail) {
     *tail = current;
 }
 
-void addSpaces(char* expression, char* expressionWithSpaces, ){
+void addSpaces(char* expression, char* expressionWithSpaces ) {
     int counterForTime = 0;
     int counterForSpaces = 0;
     char timeSymbols[nameOfVariable] = {0};
-    for (int i = 0; i < strlen(expression); i++){
-        if(expression[i] >= '0' && expression[i] <= '9'){
+    for (int i = 0; i < strlen(expression); i++) {
+        if (expression[i] >= '0' && expression[i] <= '9') {
             timeSymbols[counterForTime++] = expression[i];
-            while(expression[i+1] >= '0' && expression[i+1] <= '9'){
-                timeSymbols[counterForTime++] = expression[i+1];
+            while (expression[i + 1] >= '0' && expression[i + 1] <= '9') {
+                timeSymbols[counterForTime++] = expression[i + 1];
                 i++;
             }
-            for(int j = 0; j < counterForTime; j++){
+            for (int j = 0; j < counterForTime; j++) {
                 expressionWithSpaces[counterForSpaces++] = timeSymbols[j];
             }
             counterForSpaces++;
             counterForTime = 0;
             strcpy(timeSymbols, "");
-        } else if(expression[i] >= 'a' && expression[i] <= 'z' || expression[i] >= 'A' && expression[i] <= 'Z'){
+        } else if (expression[i] >= 'a' && expression[i] <= 'z' || expression[i] >= 'A' && expression[i] <= 'Z') {
             timeSymbols[counterForTime++] = expression[i];
-            while(){
+            while (0) {
+            }
         }
     }
 }
