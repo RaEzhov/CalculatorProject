@@ -14,13 +14,20 @@ struct data {
     int top;
 };
 
+typedef struct expressionNode{
+    char status; //0 - not initialized 1 - sign 2 - number 3 - bracket
+    char sign;
+    double number;
+    char bracket;
+} EXPNODE;
+
 typedef struct variable {
     char name[numberOfStrings];
-    double complex  value;
+    double value;
     struct variable* pointer;
 }NODE;
 
-void addToList(char* nameCur, double complex  valueCur, NODE** tail) {
+void addToList(char* nameCur, double valueCur, NODE** tail) {
     NODE* current = NULL;
     current = (NODE*)malloc(sizeof(NODE));
     strcpy(current->name, nameCur);
@@ -50,8 +57,6 @@ void clean(char* input[], int size) {
 }
 
 int main() {
-    printf("Calculator\n");
-    printf("Hello, world!\n");
     FILE* data = fopen("data.txt", "r");
     struct data inputData = { {0}, 0 };
     char* input[numberOfStrings] = { 0 };
