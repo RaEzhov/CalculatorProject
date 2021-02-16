@@ -4,6 +4,7 @@
 #include <complex.h>
 //#include "tree.h"
 #include <math.h>
+#include "linkedList.h"
 
 #define numberOfStrings 15
 #define expressionLength 100
@@ -14,12 +15,7 @@ struct data {
     int top;
 };
 
-typedef struct expressionNode{
-    char status; //0 - not initialized 1 - sign 2 - number 3 - bracket
-    char sign;
-    double number;
-    char bracket;
-} EXPNODE;
+
 
 typedef struct variable {
     char name[numberOfStrings];
