@@ -15,8 +15,6 @@ struct data {
     int top;
 };
 
-
-
 typedef struct variable {
     char name[numberOfStrings];
     double value;
