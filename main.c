@@ -15,6 +15,8 @@ struct data {
     int top;
 };
 
+
+
 typedef struct variable {
     char name[numberOfStrings];
     double value;
@@ -39,27 +41,38 @@ void addToList(char* nameCur, double valueCur, NODE** tail) {
     *tail = current;
 }
 
-void addSpaces(char* expression, char* expressionWithSpaces ) {
+void addSpaces(char* expression, char* expressionWithSpaces){
     int counterForTime = 0;
     int counterForSpaces = 0;
     char timeSymbols[nameOfVariable] = {0};
-    for (int i = 0; i < strlen(expression); i++) {
-        if (expression[i] >= '0' && expression[i] <= '9') {
+    for (int i = 0; i < strlen(expression); i++){
+        if(expression[i] >= '0' && expression[i] <= '9'){
             timeSymbols[counterForTime++] = expression[i];
-            while (expression[i + 1] >= '0' && expression[i + 1] <= '9') {
-                timeSymbols[counterForTime++] = expression[i + 1];
+            while(expression[i+1] >= '0' && expression[i+1] <= '9'){
+                timeSymbols[counterForTime++] = expression[i+1];
                 i++;
             }
-            for (int j = 0; j < counterForTime; j++) {
+            for(int j = 0; j < counterForTime; j++){
                 expressionWithSpaces[counterForSpaces++] = timeSymbols[j];
             }
             counterForSpaces++;
             counterForTime = 0;
-            strcpy(timeSymbols, "");
-        } else if (expression[i] >= 'a' && expression[i] <= 'z' || expression[i] >= 'A' && expression[i] <= 'Z') {
+            strclear(timeSymbols);
+        } else if(expression[i] >= 'a' && expression[i] <= 'z' || expression[i] >= 'A' && expression[i] <= 'Z'){
             timeSymbols[counterForTime++] = expression[i];
-            while (0) {
+            while(expression[i+1] >= 'a' && expression[i+1] <= 'z' || expression[i+1] >= 'A' && expression[i+1] <= 'Z' || expression[i+1] >= '0' && expression[i+1] <= '9'){
+                timeSymbols[counterForTime++] = expression[i+1];
+                i++;
             }
+            for(int k = 0; k < counterForTime; k++){
+                expressionWithSpaces[counterForSpaces++] = timeSymbols[k];
+            }
+            counterForSpaces++;
+            counterForTime = 0;
+            strclear(timeSymbols);
+        } else if(expression[i] == '+' || expression[i] == '-' || expression[i] == '*' || expression[i] == '/' || expression[i] == '^' || expression[i] == ')' || expression[i] == '('){
+            expressionWithSpaces[counterForSpaces++] = expression[i];
+            counterForSpaces++;
         }
     }
 }
@@ -94,15 +107,21 @@ int main() {
     char variableTime[nameOfVariable] = {0};
     char expressionTime[expressionLength] = {0};
 
-    for (int i = counter; i < 0; i--){
+    /*for (int i = counter; i < 0; i--){
         sscanf(input[i],"%s = %s", variableTime, expressionTime);
 
-    }
+    }*/
 
-    while (counter >= 0) {
-        printf("%s\n", input[counter]);
-        counter--;
+    char exp[100] = {0};
+    char exps[200] = {0};
+    for(int i = 0; i <= 200; i++){
+        exps[i] = 32;
     }
+    scanf("%s", exp);
+    addSpaces(exp, exps);
+    printf("%s", exps);
+
+
     NODE* tail = NULL;
     fclose(data);
     clean(input, top);
