@@ -7,10 +7,12 @@ typedef struct expressionNode{
     char sign;
     double number;
     char bracket;
-    struct expressionNode* previous;
+    struct expressionNode* pointer;
 } EXPNODE;
 
-EXPNODE* stackBorn();
+
+
+
 void pushToStack(EXPNODE* top, char status, char* value));
 
 #endif
