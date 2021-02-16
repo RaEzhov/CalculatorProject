@@ -7,7 +7,5 @@
 int main() {
     complex double a = 5.0 + 3.0*I, b = 7 + 2*I, z;
     z = a / b;
-    printf("%g %gi", creal(z), cimag(z));
-
     return 0;
 }
