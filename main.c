@@ -31,7 +31,7 @@ void strclear(char str[]){
     }
 }
 
-void addToList(char* nameCur, double valueCur, NODE** tail) {
+/*void addToList(char* nameCur, double valueCur, NODE** tail) {
     NODE* current = NULL;
     current = (NODE*)malloc(sizeof(NODE));
     strcpy(current->name, nameCur);
@@ -39,7 +39,7 @@ void addToList(char* nameCur, double valueCur, NODE** tail) {
     current->pointer = NULL;
     (**tail).pointer = current;
     *tail = current;
-}
+}*/
 
 void addSpaces(char* expression, char* expressionWithSpaces){
     int counterForTime = 0;
@@ -76,6 +76,8 @@ void addSpaces(char* expression, char* expressionWithSpaces){
         }
     }
 }
+
+
 
 int fileReading(FILE* file, char* input[]) {
     int counter = 0;
@@ -121,6 +123,12 @@ int main() {
     addSpaces(exp, exps);
     printf("%s", exps);
 
+    EXPNODE* list = NULL;
+
+
+    for (int i = 0; i < strlen(exps); i++){
+
+    }
 
     NODE* tail = NULL;
     fclose(data);
