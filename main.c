@@ -35,7 +35,7 @@ void addToList(char* nameCur, double valueCur, NODE** tail) {
 
 void addSpaces(char* expression, char* expressionWithSpaces, ){
     for (int i = 0; i < strlen(expression); i++){
-        if(expression[i])
+        if(expression[i] >= '0' && expression[i] <= '9')
     }
 }
 
