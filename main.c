@@ -37,6 +37,12 @@ void addToList(char* nameCur, double valueCur, NODE** tail) {
     *tail = current;
 }
 
+void addSpaces(char* expression, char* expressionWithSpaces, ){
+    for (int i = 0; i < strlen(expression); i++){
+        if(expression[i])
+    }
+}
+
 int fileReading(FILE* file, char* input[]) {
     int counter = 0;
     while (!feof(file)) {
