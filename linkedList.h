@@ -1,6 +1,5 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
-#define numberLength 20
 
 typedef struct expressionNode{
     char status; //0 - not initialized 1 - sign 2 - number 3 - bracket
@@ -10,9 +9,11 @@ typedef struct expressionNode{
     struct expressionNode* pointer;
 } EXPNODE;
 
+void addToList(EXPNODE* list, char status, char* value);
 
 
+void pushToStack(EXPNODE* top, char status, char* value);
 
-void pushToStack(EXPNODE* top, char status, char* value));
+EXPNODE popFromStack(EXPNODE** top);
 
-#endif
+#endif //LINKEDLIST_H
