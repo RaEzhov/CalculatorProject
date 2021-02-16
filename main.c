@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <complex.h>
 //#include "tree.h"
+#include <math.h>
 
 #define numberOfStrings 15
 #define expressionLength 100
