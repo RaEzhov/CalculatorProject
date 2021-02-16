@@ -11,7 +11,6 @@ void addToList(EXPNODE* list, char status, char* value){
         case 2:
             node->status = 2;
             node->number = strtod(value, NULL);
-
             break;
         case 3:
             node->status = 3;
@@ -23,6 +22,17 @@ void addToList(EXPNODE* list, char status, char* value){
         list = list->pointer;
     }
     list->pointer = node;
+}
+
+void clearList(EXPNODE* list){
+    EXPNODE * prev = list;
+    list = list->pointer;
+    while(list->pointer){
+        free(prev);
+        prev = list;
+        list = list->pointer;
+    }
+
 }
 
 void pushToStack(EXPNODE* top, char status, char* value){
@@ -49,4 +59,10 @@ void pushToStack(EXPNODE* top, char status, char* value){
     } else {
         top = node;
     }
+}
+
+EXPNODE popFromStack(EXPNODE** top){
+    EXPNODE ret = **top;
+    *top = ret.pointer;
+    return ret;
 }
