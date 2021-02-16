@@ -49,6 +49,7 @@ void clean(char* input[], int size) {
 }
 
 int main() {
+    printf("Calculator\n");
     printf("Hello, world!\n");
     FILE* data = fopen("data.txt", "r");
     struct data inputData = { {0}, 0 };
