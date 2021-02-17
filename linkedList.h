@@ -12,8 +12,7 @@ typedef struct expressionNode{
 void addToList(EXPNODE** list, char status, char* value);
 void clearList(EXPNODE* list);
 
-void pushToStack(EXPNODE* top, char status, char* value);
-
+void pushToStack(EXPNODE** top, char status, char* value);
 EXPNODE popFromStack(EXPNODE** top);
 
 #endif //LINKEDLIST_H

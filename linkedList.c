@@ -49,34 +49,45 @@ void clearList(EXPNODE* list){
     free(list);
 }
 
-void pushToStack(EXPNODE* top, char status, char* value){
+void pushToStack(EXPNODE** top, char status, char* value){
     EXPNODE * node = (EXPNODE*)malloc(sizeof(EXPNODE));
     switch (status) {
         case 1:
             node->status = 1;
+            node->bracket = 0;
+            node->number = 0;
             node->sign = value[0];
             break;
         case 2:
             node->status = 2;
+            node->bracket = 0;
+            node->sign = 0;
             node->number = strtod(value, NULL);
-
             break;
         case 3:
             node->status = 3;
+            node->number = 0;
+            node->sign = 0;
             node->bracket = value[0];
+            break;
         default:
-            exit(-1);
+            exit(-3);
     }
-    if (top){
-        node->pointer = top;
-        top = node;
+    node->pointer = 0;
+    if (*top){
+        node->pointer = *top;
+        *top = node;
     } else {
-        top = node;
+        *top = node;
     }
 }
 
 EXPNODE popFromStack(EXPNODE** top){
-    EXPNODE ret = **top;
-    *top = ret.pointer;
-    return ret;
+    if(*top) {
+        EXPNODE ret = **top;
+        free(*top);
+        *top = ret.pointer;
+        return ret;
+    }
+    exit(-4);
 }

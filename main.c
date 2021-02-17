@@ -16,8 +16,6 @@ struct data {
     int top;
 };
 
-
-
 /*typedef struct variable {
     char name[numberOfStrings];
     double value;
@@ -100,7 +98,35 @@ void clean(char* input[], int size) {
 }
 
 int main() {
-    FILE* data = fopen("data.txt", "r");
+    EXPNODE* stack = NULL;
+    pushToStack(&stack,3, "(");
+    pushToStack(&stack,2, "214");
+    pushToStack(&stack,1, "*");
+    pushToStack(&stack,3, "(");
+    pushToStack(&stack,2, "214");
+    pushToStack(&stack,1, "*");
+    popFromStack(&stack);
+    popFromStack(&stack);
+    popFromStack(&stack);
+    popFromStack(&stack);
+    popFromStack(&stack);
+    popFromStack(&stack);
+
+    EXPNODE * expList = NULL;
+    addToList(&expList,1,"-");
+    addToList(&expList,2,"324.41");
+    addToList(&expList,3,")");
+    clearList(expList);
+
+    VARNODE * list = NULL;
+    addToVariableList(&list,"PI",3.14);
+    addToVariableList(&list,"e", 2.7);
+    double pi = retValue(list,"PI");
+    printf("PI = %lf\n", pi);
+    clearVarList(list);
+
+
+    /*FILE* data = fopen("data.txt", "r");
     struct data inputData = { {0}, 0 };
     char* input[numberOfStrings] = { 0 };
     int top = fileReading(data, input);
@@ -124,15 +150,12 @@ int main() {
     addSpaces(exp, exps);
     printf("%s", exps);
 
-    EXPNODE* list = NULL;
-
-
     for (int i = 0; i < strlen(exps); i++){
 
     }
 
     fclose(data);
     clean(input, top);
-
+*/
     return 0;
 }
