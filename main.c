@@ -2,9 +2,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <complex.h>
-//#include "tree.h"
+#include "tree.h"
 #include <math.h>
 #include "linkedList.h"
+#include "variableList.h"
 
 #define numberOfStrings 15
 #define expressionLength 100
@@ -17,11 +18,11 @@ struct data {
 
 
 
-typedef struct variable {
+/*typedef struct variable {
     char name[numberOfStrings];
     double value;
     struct variable* pointer;
-}NODE;
+}NODE;*/
 
 void strclear(char str[]){
     int i = 0;
@@ -109,10 +110,10 @@ int main() {
     char variableTime[nameOfVariable] = {0};
     char expressionTime[expressionLength] = {0};
 
-    /*for (int i = counter; i < 0; i--){
+    for (int i = counter; i < 0; i--){
         sscanf(input[i],"%s = %s", variableTime, expressionTime);
 
-    }*/
+    }
 
     char exp[100] = {0};
     char exps[200] = {0};
@@ -130,8 +131,8 @@ int main() {
 
     }
 
-    NODE* tail = NULL;
     fclose(data);
     clean(input, top);
+
     return 0;
 }

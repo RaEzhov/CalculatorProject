@@ -1,27 +1,40 @@
 #include "linkedList.h"
 #include <stdlib.h>
 
-void addToList(EXPNODE* list, char status, char* value){
+void addToList(EXPNODE** list, char status, char* value){
     EXPNODE * node = (EXPNODE*)malloc(sizeof(EXPNODE));
     switch (status) {
         case 1:
             node->status = 1;
+            node->bracket = 0;
+            node->number = 0;
             node->sign = value[0];
             break;
         case 2:
             node->status = 2;
+            node->bracket = 0;
+            node->sign = 0;
             node->number = strtod(value, NULL);
             break;
         case 3:
             node->status = 3;
+            node->number = 0;
+            node->sign = 0;
             node->bracket = value[0];
+            break;
         default:
             exit(-1);
     }
-    while(list->pointer){
-        list = list->pointer;
+    node->pointer = NULL;
+
+    if(*list == 0){
+        *list = node;
+        return;
     }
-    list->pointer = node;
+    while((*list)->pointer){
+        list = &(*list)->pointer;
+    }
+    (*list)->pointer = node;
 }
 
 void clearList(EXPNODE* list){
@@ -32,7 +45,8 @@ void clearList(EXPNODE* list){
         prev = list;
         list = list->pointer;
     }
-
+    free(prev);
+    free(list);
 }
 
 void pushToStack(EXPNODE* top, char status, char* value){

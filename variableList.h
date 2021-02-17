@@ -9,7 +9,8 @@ typedef struct variable {
     struct variable* pointer;
 }VARNODE;
 
-void addToVariableList();
-double retValue();
+void addToVariableList(VARNODE** list, char* name, double value);
+double retValue(VARNODE* list, char* name);
+void clearVarList(VARNODE* list);
 
 #endif //VARIABLELIST_H

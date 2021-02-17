@@ -9,8 +9,8 @@ typedef struct expressionNode{
     struct expressionNode* pointer;
 } EXPNODE;
 
-void addToList(EXPNODE* list, char status, char* value);
-
+void addToList(EXPNODE** list, char status, char* value);
+void clearList(EXPNODE* list);
 
 void pushToStack(EXPNODE* top, char status, char* value);
 
