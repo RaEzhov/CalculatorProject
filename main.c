@@ -40,6 +40,56 @@ void strclear(char str[]){
     *tail = current;
 }*/
 
+void strReplace(char* string, char what[], char forWhat[], int sizeOfString){
+    int pos = 0;
+    for(int i = 0; i < strlen(string) - strlen(what); i++){
+        for(int j = 0; j < strlen(what); j++){
+            if (string[j + i] != what[j]){
+                i++;
+                j = -1;
+                continue;
+            }
+        }
+        pos = i;
+        break;
+    }
+    int strlenWhat = strlen(what);
+    int strlenForWhat = strlen(forWhat);
+    int strlenString = strlen(string);
+    if(strlenWhat == strlenForWhat){
+        int j = 0;
+        for(int i = pos; i < pos + strlenWhat; i++){
+            string[i] = forWhat[j++];
+        }
+        return;
+    }
+    if (strlenWhat > strlenForWhat){
+        int j = 0;
+        for(int i = pos; i < pos + strlenForWhat; i++){
+            string[i] = forWhat[j++];
+        }
+        for(int i = pos + strlenForWhat; i < strlenString - (strlenWhat - strlenForWhat); i++){
+            string[i] = string[i + strlenWhat - strlenForWhat];
+        }
+        for(int i =  strlenString - 1; i >= strlenString - (strlenWhat - strlenForWhat); i--){
+            string[i] = 0;
+        }
+        return;
+    }
+    if (strlenWhat < strlenForWhat){
+        if (strlenString + strlenForWhat - strlenWhat >= sizeOfString){
+            exit(-5);
+        }
+        for(int i = strlenString + strlenForWhat - strlenWhat - 1; i >= pos; i--){
+            string[i] = string[i-strlenForWhat + strlenWhat];
+        }
+        int j = 0;
+        for(int i = pos; i < pos + strlenForWhat; i++){
+            string[i] = forWhat[j++];
+        }
+    }
+}
+
 void addSpaces(char* expression, char* expressionWithSpaces){
     int counterForTime = 0;
     int counterForSpaces = 0;
@@ -76,8 +126,6 @@ void addSpaces(char* expression, char* expressionWithSpaces){
     }
 }
 
-
-
 int fileReading(FILE* file, char* input[]) {
     int counter = 0;
     while (!feof(file)) {
@@ -98,6 +146,14 @@ void clean(char* input[], int size) {
 }
 
 int main() {
+
+    char a[] = "Hello, world!";
+    printf("%s\nWhat's your name?\n", a);
+    char name[20] = {0};
+    scanf("%s", name);
+    strReplace(a,"world", name,20);
+    printf("%s\n", a);
+
     EXPNODE* stack = NULL;
     pushToStack(&stack,3, "(");
     pushToStack(&stack,2, "214");
@@ -122,9 +178,7 @@ int main() {
     addToVariableList(&list,"PI",3.14);
     addToVariableList(&list,"e", 2.7);
     double pi = retValue(list,"PI");
-    printf("PI = %lf\n", pi);
     clearVarList(list);
-
 
     /*FILE* data = fopen("data.txt", "r");
     struct data inputData = { {0}, 0 };
