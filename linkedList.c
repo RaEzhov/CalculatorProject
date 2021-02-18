@@ -59,8 +59,15 @@ void clearList(EXPNODE* list){
     free(list);
 }
 
-void pushToStack(EXPNODE** top, char status, char* value){
+void pushToStack(EXPNODE** top, EXPNODE newNode){
     EXPNODE * node = (EXPNODE*)malloc(sizeof(EXPNODE));
+    *node = newNode;
+    node->pointer = NULL;
+    if ((*top)->pointer){
+        (*top)->pointer = node;
+    }
+    *top = node;
+
     switch (status) {
         case 1:
             node->status = 1;

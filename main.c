@@ -144,6 +144,17 @@ int fileReading(FILE* file, char* input[]) {
     return counter - 1;
 }
 
+EXPNODE* rpn(EXPNODE* expression){
+    EXPNODE* stackOperations = NULL;
+    EXPNODE* stackResult = NULL;
+
+    while(expression->pointer){
+        switch (expression->status) {
+            case 1:
+        }
+    }
+}
+
 void clean(struct data input) {
     for (int i = 0; i <= input.top; i++) {
         free(input.input[i]);
