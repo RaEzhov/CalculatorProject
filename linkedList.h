@@ -2,10 +2,11 @@
 #define LINKEDLIST_H
 
 typedef struct expressionNode{
-    char status; //0 - not initialized 1 - sign 2 - number 3 - bracket
+    char status; //0 - not initialized 1 - sign 2 - number 3 - bracket 4 - function
     char sign;
     double number;
     char bracket;
+    char function;
     struct expressionNode* pointer;
 } EXPNODE;
 
