@@ -16,12 +16,6 @@ struct data {
     int top;
 };
 
-/*typedef struct variable {
-    char name[numberOfStrings];
-    double value;
-    struct variable* pointer;
-}NODE;*/
-
 void strclear(char str[]){
     int i = 0;
     while(str[i]){
@@ -30,19 +24,9 @@ void strclear(char str[]){
     }
 }
 
-/*void addToList(char* nameCur, double valueCur, NODE** tail) {
-    NODE* current = NULL;
-    current = (NODE*)malloc(sizeof(NODE));
-    strcpy(current->name, nameCur);
-    current->value = valueCur;
-    current->pointer = NULL;
-    (**tail).pointer = current;
-    *tail = current;
-}*/
-
 void strReplace(char* string, char what[], char forWhat[], int sizeOfString){
     int pos = 0;
-    for(int i = 0; i < strlen(string) - strlen(what); i++){
+    for(int i = 0; i < (strlen(string) - strlen(what)); i++){
         for(int j = 0; j < strlen(what); j++){
             if (string[j + i] != what[j]){
                 i++;
@@ -139,20 +123,13 @@ int fileReading(FILE* file, char* input[]) {
     return counter - 1;
 }
 
-void clean(char* input[], int size) {
-    for (int i = 0; i <= size; i++) {
-        free(input[i]);
+void clean(struct data input) {
+    for (int i = 0; i <= input.top; i++) {
+        free(input.input[i]);
     }
 }
 
 int main() {
-
-    char a[] = "Hello, world!";
-    printf("%s\nWhat's your name?\n", a);
-    char name[20] = {0};
-    scanf("%s", name);
-    strReplace(a,"world", name,20);
-    printf("%s\n", a);
 
     EXPNODE* stack = NULL;
     pushToStack(&stack,3, "(");
@@ -180,36 +157,24 @@ int main() {
     double pi = retValue(list,"PI");
     clearVarList(list);
 
-    /*FILE* data = fopen("data.txt", "r");
+
+
+
+    FILE* data = fopen("data.txt", "r");
     struct data inputData = { {0}, 0 };
-    char* input[numberOfStrings] = { 0 };
-    int top = fileReading(data, input);
+
+    inputData.top = fileReading(data, inputData.input);
     int counter = 0;
-    counter = top;
+    counter = inputData.top;
 
     char variableTime[nameOfVariable] = {0};
     char expressionTime[expressionLength] = {0};
 
     for (int i = counter; i < 0; i--){
-        sscanf(input[i],"%s = %s", variableTime, expressionTime);
-
-    }
-
-    char exp[100] = {0};
-    char exps[200] = {0};
-    for(int i = 0; i <= 200; i++){
-        exps[i] = 32;
-    }
-    scanf("%s", exp);
-    addSpaces(exp, exps);
-    printf("%s", exps);
-
-    for (int i = 0; i < strlen(exps); i++){
-
+        sscanf(inputData.input[i],"%s = %s", variableTime, expressionTime);
     }
 
     fclose(data);
-    clean(input, top);
-*/
+    clean(inputData);
     return 0;
 }
