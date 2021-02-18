@@ -16,6 +16,9 @@ struct data {
     int top;
 };
 
+static char* availableFunctions[] = {"sin", "cos", "tan", "atan", "log", "lg", "ln", "sqrt", "pow", "abs", "exp"};
+static int countOfAvailableFunctions = 11;
+
 void strclear(char str[]){
     int i = 0;
     while(str[i]){
@@ -23,6 +26,7 @@ void strclear(char str[]){
         i++;
     }
 }
+
 
 void strReplace(char* string, char what[], char forWhat[], int sizeOfString){
     int pos = 0;
@@ -72,6 +76,14 @@ void strReplace(char* string, char what[], char forWhat[], int sizeOfString){
             string[i] = forWhat[j++];
         }
     }
+}
+
+char strSearch(char* string, char what[]){
+
+}
+
+void strPrepare(){
+
 }
 
 void addSpaces(char* expression, char* expressionWithSpaces){
