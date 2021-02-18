@@ -16,8 +16,8 @@ struct data {
     int top;
 };
 
-static char* availableFunctions[] = {"sin", "cos", "tan", "atan", "log", "lg", "ln", "sqrt", "pow", "abs", "exp"};
-static char* availableFunctionsSymbols[] ={"!", "@", "#", "№", "$", "%", "&", "?", "_", ":"};
+static char* availableFunctions[] = {       "sin",  "cos",  "tan",  "atan", "log",  "lg",   "ln",   "sqrt", "pow",  "abs", "exp"};
+static char* availableFunctionsSymbols[] ={ "!",    "@",    "#",    "№",    "$",    "%",    "&",    "?",    "_",    ":", (char*)1};
 static int countOfAvailableFunctions = 11;
 
 void strclear(char str[]){
@@ -27,7 +27,6 @@ void strclear(char str[]){
         i++;
     }
 }
-
 
 void strReplace(char* string, char what[], char forWhat[], int sizeOfString){
     int pos = 0;
@@ -79,10 +78,6 @@ void strReplace(char* string, char what[], char forWhat[], int sizeOfString){
     }
 }
 
-char strSearch(char* string, char what[]){
-
-}
-
 void addSpaces(char* expression){
     char expressionWithSpaces[expressionLength] = {0};
     for (int i = 0; i < expressionLength; i++){
@@ -126,17 +121,14 @@ void addSpaces(char* expression){
 
 void strPrepare(char* expression){
     addSpaces(expression);
-
-}
-
-void strPrepare(char* expression){
-
     for (int i = 0; i < countOfAvailableFunctions; i++){
         while (strstr(expression, availableFunctions[i])){
-            strReplace(expression,availableFunctions[i],availableFunctionsSymbols, expressionLength);
+            strReplace(expression,availableFunctions[i],availableFunctionsSymbols[i], expressionLength);
         }
     }
-
+    while (strstr(expression, "( -")){
+        strReplace(expression,"( -","~ (", expressionLength);
+    }
 }
 
 int fileReading(FILE* file, char* input[]) {
@@ -199,12 +191,16 @@ int main() {
     char variableTime[nameOfVariable] = {0};
     char expressionTime[expressionLength] = {0};
 
-    for (int i = counter; i < 0; i--){
+   /* for (int i = counter; i < 0; i--){
         sscanf(inputData.input[i],"%s = %s", variableTime, expressionTime);
         strPrepare(expressionTime);
 
     }
+    */
 
+   char a[expressionLength] = "(-sin(5*3+cos(sqrt((-6)/2))))";
+   strPrepare(a);
+   printf("%s", a);
     fclose(data);
     clean(inputData);
     return 0;
