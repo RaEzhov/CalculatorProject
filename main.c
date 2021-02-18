@@ -16,8 +16,8 @@ struct data {
     int top;
 };
 
-static char* availableFunctions[] = {       "sin",  "cos",  "tan",  "atan", "log",  "lg",   "ln",   "sqrt", "pow",  "abs", "exp"};
-static char* availableFunctionsSymbols[] ={ "!",    "@",    "#",    "№",    "$",    "%",    "&",    "?",    "_",    ":", (char*)1};
+static char* availableFunctions[] = {       "sin",  "cos",  "tan",  "atan", "log",  "lg",   "ln",   "sqrt", "pow",  "abs", "exp"};  // "-"
+static char* availableFunctionsSymbols[] ={ "!",    "@",    "#",    "№",    "$",    "%",    "&",    "?",    "_",    ":", (char*)1}; // "~"
 static int countOfAvailableFunctions = 11;
 
 void strclear(char str[]){
@@ -151,36 +151,6 @@ void clean(struct data input) {
 }
 
 int main() {
-
-    EXPNODE* stack = NULL;
-    pushToStack(&stack,3, "(");
-    pushToStack(&stack,2, "214");
-    pushToStack(&stack,1, "*");
-    pushToStack(&stack,3, "(");
-    pushToStack(&stack,2, "214");
-    pushToStack(&stack,1, "*");
-    popFromStack(&stack);
-    popFromStack(&stack);
-    popFromStack(&stack);
-    popFromStack(&stack);
-    popFromStack(&stack);
-    popFromStack(&stack);
-
-    EXPNODE * expList = NULL;
-    addToList(&expList,1,"-");
-    addToList(&expList,2,"324.41");
-    addToList(&expList,3,")");
-    clearList(expList);
-
-    VARNODE * list = NULL;
-    addToVariableList(&list,"PI",3.14);
-    addToVariableList(&list,"e", 2.7);
-    double pi = retValue(list,"PI");
-    clearVarList(list);
-
-
-
-
     FILE* data = fopen("data.txt", "r");
     struct data inputData = { {0}, 0 };
 
@@ -191,17 +161,15 @@ int main() {
     char variableTime[nameOfVariable] = {0};
     char expressionTime[expressionLength] = {0};
 
-   /* for (int i = counter; i < 0; i--){
+   for (int i = counter; i < 0; i--){
         sscanf(inputData.input[i],"%s = %s", variableTime, expressionTime);
         strPrepare(expressionTime);
 
-    }
-    */
+   }
 
-   char a[expressionLength] = "(-sin(5*3+cos(sqrt((-6)/2))))";
-   strPrepare(a);
-   printf("%s", a);
-    fclose(data);
-    clean(inputData);
+
+
+   fclose(data);
+   clean(inputData);
     return 0;
 }
