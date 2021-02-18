@@ -17,6 +17,7 @@ struct data {
 };
 
 static char* availableFunctions[] = {"sin", "cos", "tan", "atan", "log", "lg", "ln", "sqrt", "pow", "abs", "exp"};
+
 static int countOfAvailableFunctions = 11;
 
 void strclear(char str[]){
@@ -78,13 +79,6 @@ void strReplace(char* string, char what[], char forWhat[], int sizeOfString){
     }
 }
 
-char strSearch(char* string, char what[]){
-
-}
-
-void strPrepare(){
-
-}
 
 void addSpaces(char* expression, char* expressionWithSpaces){
     int counterForTime = 0;
@@ -122,6 +116,16 @@ void addSpaces(char* expression, char* expressionWithSpaces){
     }
 }
 
+void strPrepare(char* expression){
+
+    for (int i = 0; i < countOfAvailableFunctions; i++){
+        while (strstr(expression, availableFunctions[i])){
+            strReplace(expression,availableFunctions[i],availableFunctionsSymbols, expressionLength);
+        }
+    }
+
+}
+
 int fileReading(FILE* file, char* input[]) {
     int counter = 0;
     while (!feof(file)) {
@@ -142,7 +146,6 @@ void clean(struct data input) {
 }
 
 int main() {
-
     EXPNODE* stack = NULL;
     pushToStack(&stack,3, "(");
     pushToStack(&stack,2, "214");
@@ -184,6 +187,8 @@ int main() {
 
     for (int i = counter; i < 0; i--){
         sscanf(inputData.input[i],"%s = %s", variableTime, expressionTime);
+        strPrepare(expressionTime);
+
     }
 
     fclose(data);
