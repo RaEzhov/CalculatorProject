@@ -67,46 +67,6 @@ void pushToStack(EXPNODE** top, EXPNODE newNode){
         (*top)->pointer = node;
     }
     *top = node;
-
-    switch (status) {
-        case 1:
-            node->status = 1;
-            node->bracket = 0;
-            node->number = 0;
-            node->function = 0;
-            node->sign = value[0];
-            break;
-        case 2:
-            node->status = 2;
-            node->bracket = 0;
-            node->sign = 0;
-            node->function = 0;
-            node->number = strtod(value, NULL);
-            break;
-        case 3:
-            node->status = 3;
-            node->number = 0;
-            node->function = 0;
-            node->sign = 0;
-            node->bracket = value[0];
-            break;
-        case 4:
-            node->status = 4;
-            node->function = value[0];
-            node->sign = 0;
-            node->number = 0;
-            node->bracket = 0;
-            break;
-        default:
-            exit(-3);
-    }
-    node->pointer = 0;
-    if (*top){
-        node->pointer = *top;
-        *top = node;
-    } else {
-        *top = node;
-    }
 }
 
 EXPNODE popFromStack(EXPNODE** top){
