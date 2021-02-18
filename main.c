@@ -129,6 +129,16 @@ void strPrepare(char* expression){
 
 }
 
+void strPrepare(char* expression){
+
+    for (int i = 0; i < countOfAvailableFunctions; i++){
+        while (strstr(expression, availableFunctions[i])){
+            strReplace(expression,availableFunctions[i],availableFunctionsSymbols, expressionLength);
+        }
+    }
+
+}
+
 int fileReading(FILE* file, char* input[]) {
     int counter = 0;
     while (!feof(file)) {
@@ -189,10 +199,11 @@ int main() {
     char variableTime[nameOfVariable] = {0};
     char expressionTime[expressionLength] = {0};
 
-   /* for (int i = counter; i < 0; i--){
+    for (int i = counter; i < 0; i--){
         sscanf(inputData.input[i],"%s = %s", variableTime, expressionTime);
+        strPrepare(expressionTime);
+
     }
-*/
 
     fclose(data);
     clean(inputData);
