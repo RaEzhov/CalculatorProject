@@ -28,6 +28,21 @@ void strclear(char str[]){
     }
 }
 
+int priority(char sign){
+    switch (sign) {
+    case '(': case ')':
+        return 0;
+    case '+': case '-':
+        return 1;
+    case '*': case '/':
+        return 2;
+    case '^':
+        return 3;
+    default:
+        exit(-6);
+    }
+}
+
 void strReplace(char* string, char what[], char forWhat[], int sizeOfString){
     int pos = 0;
     for(int i = 0; i < (strlen(string) - strlen(what)); i++){
@@ -171,6 +186,8 @@ int main() {
 
     char variableTime[nameOfVariable] = {0};
     char expressionTime[expressionLength] = {0};
+
+
 
    for (int i = counter; i < 0; i--){
         sscanf(inputData.input[i],"%s = %s", variableTime, expressionTime);
