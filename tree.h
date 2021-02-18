@@ -8,6 +8,6 @@ typedef struct Node
 
 NODE * Add2Tree(NODE* root, int val);
 NODE* DeleteTree(NODE* root);
-void PrintSym(NODE* root);
 NODE* DeleteFromTree(NODE* root, int val);
+void PrintSym(NODE* root);
 void PrintOnLeft(NODE* root, int level);

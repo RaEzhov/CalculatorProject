@@ -159,15 +159,49 @@ int fileReading(FILE* file, char* input[]) {
     return counter - 1;
 }
 
-EXPNODE* rpn(EXPNODE* expression){
-    EXPNODE* stackOperations = NULL;
-    EXPNODE* stackResult = NULL;
-
-    while(expression->pointer){
+EXPNODE* rpn(EXPNODE* expression) {
+    EXPNODE *stackOperations = NULL;
+    EXPNODE *stackResult = NULL;
+    EXPNODE zeroSpace = {0, 0, 0, 0, 0, NULL};
+    int functionCounter = 0;
+    while (expression->pointer) {
         switch (expression->status) {
             case 1:
+                if (stackOperations) {
+                    if (priority(stackOperations->sign) < priority(expression->sign)) {
+                        pushToStack(&stackOperations, *expression);
+                    } else {
+                        while (priority(stackOperations->sign) >= priority(expression->sign) && stackOperations) {
+                            pushToStack(&stackResult, popFromStack(&stackOperations));
+                        }
+                        pushToStack(&stackOperations, *expression);
+                    }
+                }
+                break;
+            case 2:
+                pushToStack(&stackResult, *expression);
+                break;
+            case 3:
+                if (expression->bracket == '(') {
+                    pushToStack(&stackOperations, *expression);
+                } else {
+                    while (stackOperations->status != 3 || stackOperations->bracket != '(') {
+                        pushToStack(&stackResult, popFromStack(&stackOperations));
+                    }
+                    popFromStack(&stackOperations);
+                    if (stackOperations->status == 4) {
+                        pushToStack(&stackResult, popFromStack(&stackOperations));
+                    }
+                }
+                break;
+            case 4:
+                pushToStack(&stackResult, zeroSpace);
+                pushToStack(&stackOperations, *expression);
+            default:
+                exit(-7);
         }
     }
+    return stackResult;
 }
 
 void clean(struct data input) {
@@ -192,9 +226,14 @@ int main() {
    for (int i = counter; i < 0; i--){
         sscanf(inputData.input[i],"%s = %s", variableTime, expressionTime);
         strPrepare(expressionTime);
-
+        //make expression list from expressionTime // replace variables with their values
+        //call rpn with expression list
+        //call makeTree with stackResult from rpn
+        //call treeCalculate with tree
+        //push variable with treeCalculate result
    }
 
+   //calculate expression in input[0]
 
 
    fclose(data);
