@@ -17,6 +17,7 @@ struct data {
 };
 
 static char* availableFunctions[] = {"sin", "cos", "tan", "atan", "log", "lg", "ln", "sqrt", "pow", "abs", "exp"};
+static char* availableFunctionsSymbols[] ={"!", "@", "#", "№", "$", "%", "&", "?", "_", };
 static int countOfAvailableFunctions = 11;
 
 void strclear(char str[]){
@@ -82,11 +83,11 @@ char strSearch(char* string, char what[]){
 
 }
 
-void strPrepare(){
-
-}
-
-void addSpaces(char* expression, char* expressionWithSpaces){
+void addSpaces(char* expression){
+    char expressionWithSpaces[expressionLength] = {0};
+    for (int i = 0; i < expressionLength; i++){
+        expressionWithSpaces[i] = 32;
+    }
     int counterForTime = 0;
     int counterForSpaces = 0;
     char timeSymbols[nameOfVariable] = {0};
@@ -120,6 +121,12 @@ void addSpaces(char* expression, char* expressionWithSpaces){
             counterForSpaces++;
         }
     }
+    strcpy(expression, expressionWithSpaces);
+}
+
+void strPrepare(char* expression){
+    addSpaces(expression);
+
 }
 
 int fileReading(FILE* file, char* input[]) {
@@ -182,9 +189,10 @@ int main() {
     char variableTime[nameOfVariable] = {0};
     char expressionTime[expressionLength] = {0};
 
-    for (int i = counter; i < 0; i--){
+   /* for (int i = counter; i < 0; i--){
         sscanf(inputData.input[i],"%s = %s", variableTime, expressionTime);
     }
+*/
 
     fclose(data);
     clean(inputData);
