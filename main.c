@@ -197,10 +197,6 @@ int main() {
 
     }
     */
-
-   char a[expressionLength] = "(-sin(5*3+cos(sqrt((-6)/2))))";
-   strPrepare(a);
-   printf("%s", a);
     fclose(data);
     clean(inputData);
     return 0;
