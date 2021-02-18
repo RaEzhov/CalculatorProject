@@ -17,7 +17,7 @@ struct data {
 };
 
 static char* availableFunctions[] = {"sin", "cos", "tan", "atan", "log", "lg", "ln", "sqrt", "pow", "abs", "exp"};
-static char* availableFunctionsSymbols[] ={"!", "@", "#", "№", "$", "%", "&", "?", "_", };
+static char* availableFunctionsSymbols[] ={"!", "@", "#", "№", "$", "%", "&", "?", "_", ":"};
 static int countOfAvailableFunctions = 11;
 
 void strclear(char str[]){
