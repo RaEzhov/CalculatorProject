@@ -10,15 +10,14 @@
 #define numberOfStrings 15
 #define expressionLength 100
 #define nameOfVariable 15
-
+#define countOfAvailableFunctions 11
 struct data {
     char* input[numberOfStrings];
     int top;
 };
 
-static char* availableFunctions[] = {       "sin",  "cos",  "tan",  "atan", "log",  "lg",   "ln",   "sqrt", "pow",  "abs", "exp"};  // "-"
-static char* availableFunctionsSymbols[] ={ "!",    "@",    "#",    "№",    "$",    "%",    "&",    "?",    "_",    ":", (char*)1}; // "~"
-static int countOfAvailableFunctions = 11;
+static char* availableFunctions[countOfAvailableFunctions] = {       "sin",  "cos",  "tan",  "atan", "log",  "lg",   "ln",   "sqrt", "pow",  "abs", "exp"};  // "-"
+static char* availableFunctionsSymbols[countOfAvailableFunctions] ={ "!",    "@",    "#",    "№",    "$",    "%",    "&",    "?",    "_",    ":",   "\\"}; // "~"
 
 void strclear(char str[]){
     int i = 0;
@@ -102,6 +101,11 @@ void addSpaces(char* expression){
     int counterForSpaces = 0;
     char timeSymbols[nameOfVariable] = {0};
     for (int i = 0; i < strlen(expression); i++){
+        // здесь я понял что ты не обработала дробные числа и сам написал какую то дичь временную чтобы оно работало)
+        if (expression[i] == '.'){
+            expressionWithSpaces[counterForSpaces - 1] = '.';
+        }
+        // конец моего кода)
         if(expression[i] >= '0' && expression[i] <= '9'){
             timeSymbols[counterForTime++] = expression[i];
             while(expression[i+1] >= '0' && expression[i+1] <= '9'){
@@ -126,11 +130,16 @@ void addSpaces(char* expression){
             counterForSpaces++;
             counterForTime = 0;
             strclear(timeSymbols);
-        } else if(expression[i] == '+' || expression[i] == '-' || expression[i] == '*' || expression[i] == '/' || expression[i] == '^' || expression[i] == ')' || expression[i] == '('){
+        } else if(expression[i] == '+' || expression[i] == '-' || expression[i] == '*' || expression[i] == '/' || expression[i] == '^' || expression[i] == ')' || expression[i] == '(' ){
             expressionWithSpaces[counterForSpaces++] = expression[i];
             counterForSpaces++;
         }
     }
+    // ещё один костыль ибо в конце строки очень много пробелов, а должен быть хоть один /0
+    for(int i = strlen(expressionWithSpaces) - 1; expressionWithSpaces[i] == 32; i--){
+        expressionWithSpaces[i] = 0;
+    }
+    //---------------
     strcpy(expression, expressionWithSpaces);
 }
 
@@ -144,6 +153,7 @@ void strPrepare(char* expression){
     while (strstr(expression, "( -")){
         strReplace(expression,"( -","~ (", expressionLength);
     }
+
 }
 
 int fileReading(FILE* file, char* input[]) {
@@ -164,15 +174,26 @@ EXPNODE* rpn(EXPNODE* expression) {
     EXPNODE *stackResult = NULL;
     EXPNODE zeroSpace = {0, 0, 0, 0, 0, NULL};
     int functionCounter = 0;
-    while (expression->pointer) {
+    while (expression) {
         switch (expression->status) {
             case 1:
                 if (stackOperations) {
-                    if (priority(stackOperations->sign) < priority(expression->sign)) {
+                    char sign = 0;
+                    if (stackOperations->status == 1){
+                        sign = stackOperations->sign;
+                    } else {
+                        sign = stackOperations->bracket;
+                    }
+                    if (priority(sign) < priority(expression->sign)) {
                         pushToStack(&stackOperations, *expression);
                     } else {
-                        while (priority(stackOperations->sign) >= priority(expression->sign) && stackOperations) {
+                        while (priority(sign) >= priority(expression->sign) && stackOperations) {
                             pushToStack(&stackResult, popFromStack(&stackOperations));
+                            if (stackOperations->status == 1){
+                                sign = stackOperations->sign;
+                            } else {
+                                sign = stackOperations->bracket;
+                            }
                         }
                         pushToStack(&stackOperations, *expression);
                     }
@@ -197,9 +218,11 @@ EXPNODE* rpn(EXPNODE* expression) {
             case 4:
                 pushToStack(&stackResult, zeroSpace);
                 pushToStack(&stackOperations, *expression);
+                break;
             default:
                 exit(-7);
         }
+        expression = expression->pointer;
     }
     return stackResult;
 }
@@ -210,9 +233,56 @@ void clean(struct data input) {
     }
 }
 
+/*char whatIsIt(char* value){
+    if(value[0] == )
+}*/
+
+EXPNODE* makeListFromExpression(char* expression, VARNODE* variables) {
+    EXPNODE *list = NULL;
+    char tempStr[expressionLength] = {0};
+    while (strlen(expression)) {
+        sscanf(expression, "%s ", tempStr);
+        printf("%s\n", tempStr);
+        expression = expression + strlen(tempStr) + 1;
+        if (tempStr[0] == '+' || tempStr[0] == '-' || tempStr[0] == '*' || tempStr[0] == '/' || tempStr[0] == '^') {
+            addToList(&list, 1, tempStr);
+            continue;
+        } else if (tempStr[0] >= '0' && tempStr[0] <= '9') {
+            addToList(&list, 2, tempStr);
+            continue;
+        } else if (tempStr[0] == '(' || tempStr[0] == ')') {
+            addToList(&list, 3, tempStr);
+            continue;
+        } else if (tempStr[0] >= 'a' && tempStr[0] <= 'z' || tempStr[0] >= 'A' && tempStr[0] <= 'Z') {
+            char* doubleToStr = (char*)malloc(sizeof(char) * expressionLength);
+            sprintf(doubleToStr, "%lf", retValue(variables,tempStr));
+            addToList(&list,2,doubleToStr);
+            free(doubleToStr);
+            continue;
+        } else {
+            for(int i = 0; i < countOfAvailableFunctions; i++){
+                if (!strcmp(tempStr,availableFunctionsSymbols[i])){
+                    addToList(&list, 4, tempStr);
+                    i = countOfAvailableFunctions;
+                }
+            }
+            if (!strcmp(tempStr,"~")){
+                addToList(&list,4,tempStr);
+            }
+
+        }
+    }
+    return list;
+}
+
+void initConstants(VARNODE** variables){
+    addToVariableList(variables,"PI", M_PI);
+    addToVariableList(variables, "E", M_E);
+}
+
 int main() {
-    FILE* data = fopen("data.txt", "r");
-    struct data inputData = { {0}, 0 };
+    FILE *data = fopen("data.txt", "r");
+    struct data inputData = {{0}, 0};
 
     inputData.top = fileReading(data, inputData.input);
     int counter = 0;
@@ -221,22 +291,23 @@ int main() {
     char variableTime[nameOfVariable] = {0};
     char expressionTime[expressionLength] = {0};
 
-
-
-   for (int i = counter; i < 0; i--){
-        sscanf(inputData.input[i],"%s = %s", variableTime, expressionTime);
+    VARNODE *variables = NULL;
+    initConstants(&variables);
+    EXPNODE *expressionList = NULL;
+    EXPNODE *stackOut = NULL;
+    for (int i = counter; i > 0; i--) {
+        sscanf(inputData.input[i], "%s = %s", variableTime, expressionTime);
         strPrepare(expressionTime);
-        //make expression list from expressionTime // replace variables with their values
-        //call rpn with expression list
+        expressionList = makeListFromExpression(expressionTime, variables); //make expression list from expressionTime // replace variables with their values
+        stackOut = rpn(expressionList); //call rpn with expression list
         //call makeTree with stackResult from rpn
         //call treeCalculate with tree
         //push variable with treeCalculate result
-   }
-
-   //calculate expression in input[0]
-
-
-   fclose(data);
-   clean(inputData);
+        clearList(expressionList);
+    }
+    //calculate expression in input[0]
+    clearList(expressionList);
+    fclose(data);
+    clean(inputData);
     return 0;
 }

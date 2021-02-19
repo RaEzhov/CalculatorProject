@@ -62,10 +62,7 @@ void clearList(EXPNODE* list){
 void pushToStack(EXPNODE** top, EXPNODE newNode){
     EXPNODE * node = (EXPNODE*)malloc(sizeof(EXPNODE));
     *node = newNode;
-    node->pointer = NULL;
-    if ((*top)->pointer){
-        (*top)->pointer = node;
-    }
+    node->pointer = *top;
     *top = node;
 }
 

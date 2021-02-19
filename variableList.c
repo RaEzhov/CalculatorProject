@@ -4,9 +4,12 @@
 
 void addToVariableList(VARNODE** list, char* name, double value){
     VARNODE * node = (VARNODE*)malloc(sizeof(VARNODE));
+    for(int i = 0; i < variableLength; i++){
+        node->name[i] = 0;
+    }
     strcpy(node->name, name);
     node->value = value;
-    node->pointer = 0;
+    node->pointer = NULL;
     if (*list == 0){
         *list = node;
         return;
