@@ -47,16 +47,21 @@ void addToList(EXPNODE** list, char status, char* value){
     (*list)->pointer = node;
 }
 
-void clearList(EXPNODE* list){
-    EXPNODE * prev = list;
+void clearList(EXPNODE* list) {
+    if (!list) {
+        return;
+    }
+    EXPNODE *prev = list;
     list = list->pointer;
-    while(list->pointer){
+    while (list && list->pointer) {
         free(prev);
         prev = list;
         list = list->pointer;
     }
     free(prev);
-    free(list);
+    if (list) {
+        free(list);
+    }
 }
 
 void pushToStack(EXPNODE** top, EXPNODE newNode){

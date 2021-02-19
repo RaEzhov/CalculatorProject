@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-//#include <complex.h>
-//#include "tree.h"
+#include <complex.h>
+#include "tree.h"
 #include <math.h>
 #include "linkedList.h"
 #include "variableList.h"
@@ -16,7 +16,7 @@ struct data {
     int top;
 };
 
-static char* availableFunctions[countOfAvailableFunctions] = {       "sin",  "cos",  "tan",  "atan", "log",  "lg",   "ln",   "sqrt", "pow",  "abs", "exp"};  // "-"
+static char* availableFunctions[countOfAvailableFunctions] = {       "sin",  "cos",  "tan",  "arctg", "log",  "lg",   "ln",   "sqrt", "pow",  "abs", "exp"};  // "-"
 static char* availableFunctionsSymbols[countOfAvailableFunctions] ={ "!",    "@",    "#",    "№",    "$",    "%",    "&",    "?",    "_",    ":",   "\\"}; // "~"
 
 void strclear(char str[]){
@@ -196,6 +196,8 @@ EXPNODE* rpn(EXPNODE* expression) {
                         }
                         pushToStack(&stackOperations, *expression);
                     }
+                } else {
+                    pushToStack(&stackOperations, *expression);
                 }
                 break;
             case 2:
@@ -209,7 +211,7 @@ EXPNODE* rpn(EXPNODE* expression) {
                         pushToStack(&stackResult, popFromStack(&stackOperations));
                     }
                     popFromStack(&stackOperations);
-                    if (stackOperations->status == 4) {
+                    if (stackOperations && stackOperations->status == 4) {
                         pushToStack(&stackResult, popFromStack(&stackOperations));
                     }
                 }
@@ -222,6 +224,9 @@ EXPNODE* rpn(EXPNODE* expression) {
                 exit(-7);
         }
         expression = expression->pointer;
+    }
+    while (stackOperations) {
+        pushToStack(&stackResult, popFromStack(&stackOperations));
     }
     return stackResult;
 }
@@ -241,7 +246,6 @@ EXPNODE* makeListFromExpression(char* expression, VARNODE* variables) {
     char tempStr[expressionLength] = {0};
     while (strlen(expression)) {
         sscanf(expression, "%s ", tempStr);
-        printf("%s\n", tempStr);
         expression = expression + strlen(tempStr) + 1;
         if (tempStr[0] == '+' || tempStr[0] == '-' || tempStr[0] == '*' || tempStr[0] == '/' || tempStr[0] == '^') {
             addToList(&list, 1, tempStr);
@@ -279,6 +283,31 @@ void initConstants(VARNODE** variables){
     addToVariableList(variables, "E", M_E);
 }
 
+void printList(EXPNODE* list){
+    while(list) {
+        switch (list->status) {
+            case 0:
+                printf(" ");
+                break;
+            case 1:
+                printf("%c", list->sign);
+                break;
+            case 2:
+                printf("%.2lf",list->number);
+                break;
+            case 3:
+                printf("%c", list->bracket);
+                break;
+            case 4:
+                printf("%c", list->function);
+                break;
+            default:
+                exit(-8);
+        }
+        list = list->pointer;
+    }
+}
+
 int main() {
     FILE *data = fopen("data.txt", "r");
     struct data inputData = {{0}, 0};
@@ -298,10 +327,19 @@ int main() {
         strPrepare(expressionTime);
         expressionList = makeListFromExpression(expressionTime, variables); //make expression list from expressionTime // replace variables with their values
         stackResult = rpn(expressionList); //call rpn with expression list
+        printList(stackResult);
+        printf("\n");
+        printList(expressionList);
+        printf("\n");
         //call makeTree with stackResult from rpn
         //call treeCalculate with tree
-        //push variable with treeCalculate result
+        addToVariableList(&variables,variableTime,0);//push variable with treeCalculate result
+        clearList(stackResult);
+        stackResult = NULL;
         clearList(expressionList);
+        expressionList = NULL;
+        strclear(expressionTime);
+        strclear(variableTime);
     }
     //calculate expression in input[0]
     clearVarList(variables);
