@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <complex.h>
-#include "tree.h"
+//#include <complex.h>
+//#include "tree.h"
 #include <math.h>
 #include "linkedList.h"
 #include "variableList.h"
@@ -55,9 +55,9 @@ void strReplace(char* string, char what[], char forWhat[], int sizeOfString){
         pos = i;
         break;
     }
-    int strlenWhat = strlen(what);
-    int strlenForWhat = strlen(forWhat);
-    int strlenString = strlen(string);
+    int strlenWhat = (int)strlen(what);
+    int strlenForWhat = (int)strlen(forWhat);
+    int strlenString = (int)strlen(string);
     if(strlenWhat == strlenForWhat){
         int j = 0;
         for(int i = pos; i < pos + strlenWhat; i++){
@@ -136,7 +136,7 @@ void addSpaces(char* expression){
         }
     }
     // ещё один костыль ибо в конце строки очень много пробелов, а должен быть хоть один /0
-    for(int i = strlen(expressionWithSpaces) - 1; expressionWithSpaces[i] == 32; i--){
+    for(int i = (int)strlen(expressionWithSpaces) - 1; expressionWithSpaces[i] == 32; i--){
         expressionWithSpaces[i] = 0;
     }
     //---------------
@@ -173,12 +173,11 @@ EXPNODE* rpn(EXPNODE* expression) {
     EXPNODE *stackOperations = NULL;
     EXPNODE *stackResult = NULL;
     EXPNODE zeroSpace = {0, 0, 0, 0, 0, NULL};
-    int functionCounter = 0;
     while (expression) {
         switch (expression->status) {
             case 1:
                 if (stackOperations) {
-                    char sign = 0;
+                    char sign;
                     if (stackOperations->status == 1){
                         sign = stackOperations->sign;
                     } else {
@@ -285,8 +284,7 @@ int main() {
     struct data inputData = {{0}, 0};
 
     inputData.top = fileReading(data, inputData.input);
-    int counter = 0;
-    counter = inputData.top;
+    int counter = inputData.top;
 
     char variableTime[nameOfVariable] = {0};
     char expressionTime[expressionLength] = {0};
@@ -294,18 +292,19 @@ int main() {
     VARNODE *variables = NULL;
     initConstants(&variables);
     EXPNODE *expressionList = NULL;
-    EXPNODE *stackOut = NULL;
+    EXPNODE *stackResult = NULL;
     for (int i = counter; i > 0; i--) {
         sscanf(inputData.input[i], "%s = %s", variableTime, expressionTime);
         strPrepare(expressionTime);
         expressionList = makeListFromExpression(expressionTime, variables); //make expression list from expressionTime // replace variables with their values
-        stackOut = rpn(expressionList); //call rpn with expression list
+        stackResult = rpn(expressionList); //call rpn with expression list
         //call makeTree with stackResult from rpn
         //call treeCalculate with tree
         //push variable with treeCalculate result
         clearList(expressionList);
     }
     //calculate expression in input[0]
+    clearVarList(variables);
     clearList(expressionList);
     fclose(data);
     clean(inputData);
