@@ -21,6 +21,7 @@ void clean(struct data input);
 
 void initConstants(VARNODE** variables);
 
+
 int priority(char sign){
     switch (sign) {
         case '(': case ')':
@@ -209,6 +210,7 @@ int main() {
     clean(inputData);
     return 0;
 }
+
 
 int fileReading(FILE* file, char* input[]) {
     int counter = 0;
