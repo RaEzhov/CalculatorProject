@@ -60,6 +60,26 @@ void strReplace(char* string, char what[], char forWhat[], int sizeOfString){
     }
 }
 
+int checkNumber(char element){
+    if(element >= '0' && element <= '9'){
+        return 1;
+    }
+    return 0;
+}
+int checkLetter(char element){
+    if(element >= 'a' && element <= 'z' || element >= 'A' && element <= 'Z'){
+        return 1;
+    }
+    return 0;
+}
+
+int checkSign(char element){
+    if(element == '+' || element == '-' || element == '*' || element == '/' || element == '^' || element == ')' || element == '('){
+        return 1;
+    }
+    return 0;
+}
+
 void addSpaces(char* expression){
     char expressionWithSpaces[expressionLength] = {0};
     for (int i = 0; i < expressionLength; i++){
@@ -74,9 +94,9 @@ void addSpaces(char* expression){
             expressionWithSpaces[counterForSpaces - 1] = '.';
         }
         // конец моего кода)
-        if(expression[i] >= '0' && expression[i] <= '9'){
+        if(checkNumber(expression[i])){
             timeSymbols[counterForTime++] = expression[i];
-            while(expression[i+1] >= '0' && expression[i+1] <= '9'){
+            while(checkNumber(expression[i+1])){
                 timeSymbols[counterForTime++] = expression[i+1];
                 i++;
             }
@@ -86,9 +106,9 @@ void addSpaces(char* expression){
             counterForSpaces++;
             counterForTime = 0;
             strclear(timeSymbols);
-        } else if(expression[i] >= 'a' && expression[i] <= 'z' || expression[i] >= 'A' && expression[i] <= 'Z'){
+        } else if(checkLetter(expression[i])){
             timeSymbols[counterForTime++] = expression[i];
-            while(expression[i+1] >= 'a' && expression[i+1] <= 'z' || expression[i+1] >= 'A' && expression[i+1] <= 'Z' || expression[i+1] >= '0' && expression[i+1] <= '9'){
+            while(checkLetter(expression[i+1]) || checkNumber(expression[i+1])){
                 timeSymbols[counterForTime++] = expression[i+1];
                 i++;
             }
@@ -98,7 +118,7 @@ void addSpaces(char* expression){
             counterForSpaces++;
             counterForTime = 0;
             strclear(timeSymbols);
-        } else if(expression[i] == '+' || expression[i] == '-' || expression[i] == '*' || expression[i] == '/' || expression[i] == '^' || expression[i] == ')' || expression[i] == '(' ){
+        } else if(checkSign(expression[i])){
             expressionWithSpaces[counterForSpaces++] = expression[i];
             counterForSpaces++;
         }
