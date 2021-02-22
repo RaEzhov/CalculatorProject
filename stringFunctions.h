@@ -11,12 +11,6 @@ static char* availableFunctionsSymbols[countOfAvailableFunctions] ={ "!",    "@"
 
 void strclear(char str[]);
 
-void strReplace(char* string, char what[], char forWhat[], int sizeOfString);
-
-void addSpaces(char* expression);
-
-void delSpaces(char* expression);
-
 void strPrepare(char* expression);
 
 #endif //STRINGFUNCTIONS_H
