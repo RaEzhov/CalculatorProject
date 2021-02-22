@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TREE_H
+#define TREE_H
 
 typedef struct Node
 {
@@ -11,3 +12,5 @@ NODE* DeleteTree(NODE* root);
 NODE* DeleteFromTree(NODE* root, int val);
 void PrintSym(NODE* root);
 void PrintOnLeft(NODE* root, int level);
+
+#endif //TREE_H

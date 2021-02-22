@@ -11,9 +11,12 @@ void strclear(char str[]){
 }
 
 void strReplace(char* string, char what[], char forWhat[], int sizeOfString){
+    int strlenWhat = (int)strlen(what);
+    int strlenForWhat = (int)strlen(forWhat);
+    int strlenString = (int)strlen(string);
     int pos = 0;
-    for(int i = 0; i < (strlen(string) - strlen(what)); i++){
-        for(int j = 0; j < strlen(what); j++){
+    for(int i = 0; i < strlenString - strlenWhat;){
+        for(int j = 0; j < strlenWhat; j++){
             if (string[j + i] != what[j]){
                 i++;
                 j = -1;
@@ -23,9 +26,6 @@ void strReplace(char* string, char what[], char forWhat[], int sizeOfString){
         pos = i;
         break;
     }
-    int strlenWhat = (int)strlen(what);
-    int strlenForWhat = (int)strlen(forWhat);
-    int strlenString = (int)strlen(string);
     if(strlenWhat == strlenForWhat){
         int j = 0;
         for(int i = pos; i < pos + strlenWhat; i++){
@@ -111,7 +111,21 @@ void addSpaces(char* expression){
     strcpy(expression, expressionWithSpaces);
 }
 
+void delSpaces(char* expression){
+    for(int i = 0; i < strlen(expression); i++){
+        if (expression[i] == ' '){
+            int j = i;
+            while (j < strlen(expression)){
+                expression[j] = expression[j+1];
+                j++;
+            }
+            i--;
+        }
+    }
+}
+
 void strPrepare(char* expression){
+    delSpaces(expression);
     addSpaces(expression);
     for (int i = 0; i < countOfAvailableFunctions; i++){
         while (strstr(expression, availableFunctions[i])){
@@ -124,9 +138,5 @@ void strPrepare(char* expression){
 
 }
 
-void clean(struct data input) {
-    for (int i = 0; i <= input.top; i++) {
-        free(input.input[i]);
-    }
-}
+
 

@@ -2,19 +2,39 @@
 #include <string.h>
 #include <stdlib.h>
 #include <complex.h>
-#include "tree.h"
 #include <math.h>
+#include "tree.h"
 #include "linkedList.h"
 #include "variableList.h"
 #include "stringFunctions.h"
 
-int priority(char sign);
+#define numberOfStrings 15
+
+struct data {
+    char* input[numberOfStrings];
+    int top;
+};
 
 int fileReading(FILE* file, char* input[]);
 
+void clean(struct data input);
+
 void initConstants(VARNODE** variables);
 
-
+int priority(char sign){
+    switch (sign) {
+        case '(': case ')':
+            return 0;
+        case '+': case '-':
+            return 1;
+        case '*': case '/':
+            return 2;
+        case '^':
+            return 3;
+        default:
+            exit(-6);
+    }
+}
 
 EXPNODE* rpn(EXPNODE* expression) {
     EXPNODE *stackOperations = NULL;
@@ -163,7 +183,8 @@ int main() {
     EXPNODE *expressionList = NULL;
     EXPNODE *stackResult = NULL;
     for (int i = counter; i > 0; i--) {
-        sscanf(inputData.input[i], "%s = %s", variableTime, expressionTime);
+        sscanf(inputData.input[i], "%s = ", variableTime);
+        strcpy(expressionTime,inputData.input[i] + strlen(variableTime) + 3);
         strPrepare(expressionTime);
         expressionList = makeListFromExpression(expressionTime, variables); //make expression list from expressionTime // replace variables with their values
         stackResult = rpn(expressionList); //call rpn with expression list
@@ -189,21 +210,6 @@ int main() {
     return 0;
 }
 
-int priority(char sign){
-    switch (sign) {
-        case '(': case ')':
-            return 0;
-        case '+': case '-':
-            return 1;
-        case '*': case '/':
-            return 2;
-        case '^':
-            return 3;
-        default:
-            exit(-6);
-    }
-}
-
 int fileReading(FILE* file, char* input[]) {
     int counter = 0;
     while (!feof(file)) {
@@ -215,6 +221,12 @@ int fileReading(FILE* file, char* input[]) {
         counter++;
     }
     return counter - 1;
+}
+
+void clean(struct data input) {
+    for (int i = 0; i <= input.top; i++) {
+        free(input.input[i]);
+    }
 }
 
 void initConstants(VARNODE** variables){
