@@ -1,16 +1,20 @@
 #ifndef TREE_H
 #define TREE_H
 
-typedef struct Node
+typedef struct branch
 {
-    int val;
-    struct Node* left, * right;
-}NODE;
+    char status;  // 1 - sign 2 - number 4 - function
+    char sign;
+    double number;
+    char function;
+    struct branch* left, * right;
+    struct branch* parent;
+}BRANCH;
 
-NODE * Add2Tree(NODE* root, int val);
-NODE* DeleteTree(NODE* root);
-NODE* DeleteFromTree(NODE* root, int val);
-void PrintSym(NODE* root);
-void PrintOnLeft(NODE* root, int level);
+void addToTree(BRANCH** root, BRANCH node);
+BRANCH* deleteTree(BRANCH * root);
+//BRANCH* DeleteFromTree(BRANCH * root, int val);
+//void PrintSym(BRANCH* root);
+void PrintOnLeft(BRANCH* root, int level);
 
 #endif //TREE_H

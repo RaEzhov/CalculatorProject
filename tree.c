@@ -1,41 +1,54 @@
 #include "tree.h"
+#include "linkedList.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-NODE* Add2Tree(NODE* root, int val)
-{
-    if (!root)
-    {
-        root = (NODE*)malloc(sizeof(NODE));
-        root->val = val;
-        root->left = root->right = 0;
-    }
-    else
-    {
-        if (root->val > val)
-        {
-            root->left = Add2Tree(root->left, val);
-        }
-        else
-        {
-            root->right = Add2Tree(root->right, val);
-        }
-    }
-    return root;
+BRANCH* allocateMemory(){
+    return (BRANCH*)malloc(sizeof (BRANCH));
 }
 
-NODE* DeleteTree(NODE* root)
+void addToTree(BRANCH** root, BRANCH node)
+{
+    if (!(*root))
+    {
+        *root = allocateMemory();
+        **root = node;
+        (*root)->parent = (*root)->left = (*root)->right = NULL;
+    }
+    else {
+        if ((*root)->status == 2){
+            (*root) = (*root)->parent;
+        }
+        if (!(*root)->right) {
+            (*root)->right = allocateMemory();
+            *((*root)->right) = node;
+            (*root)->right->parent = (*root);
+            (*root) = (*root)->right;
+        } else {
+            while ((*root)->left && (*root)->status != 4) {
+                (*root) = (*root)->parent;
+            }
+            (*root)->left = allocateMemory();
+            *((*root)->left) = node;
+            (*root)->left->parent = (*root);
+            (*root) = (*root)->left;
+        }
+    }
+}
+
+
+BRANCH* deleteTree(BRANCH* root)
 {
     if (root)
     {
-        DeleteTree(root->left);
-        DeleteTree(root->right);
+        deleteTree(root->left);
+        deleteTree(root->right);
         free(root);
     }
     return 0;
 }
-
-void PrintSym(NODE* root)
+/*
+void PrintSym(BRANCH* root)
 {
     if (root)
     {
@@ -45,7 +58,7 @@ void PrintSym(NODE* root)
     }
 }
 
-void Remove(NODE** root, int* val)
+void Remove(BRANCH** root, int* val)
 {
     while ((*root)->left)
     {
@@ -54,7 +67,7 @@ void Remove(NODE** root, int* val)
     *val = (*root)->val;
 }
 
-NODE* DelNode(NODE* root)
+BRANCH* DelNode(BRANCH* root)
 {
     if (!root->left && !root->right)
     {
@@ -63,7 +76,7 @@ NODE* DelNode(NODE* root)
     }
     if (root->left && !root->right || !root->left && root->right)
     {
-        NODE* p;
+        BRANCH* p;
         if (root->left)
         {
             p = root->left;
@@ -85,7 +98,7 @@ NODE* DelNode(NODE* root)
     }
 }
 
-NODE* DeleteFromTree(NODE* root, int val)
+BRANCH* DeleteFromTree(BRANCH* root, int val)
 {
     if (!root)
     {
@@ -106,7 +119,8 @@ NODE* DeleteFromTree(NODE* root, int val)
     return root;
 }
 
-void PrintOnLeft(NODE* root, int level)
+ */
+void PrintOnLeft(BRANCH* root, int level)
 {
     if (root)
     {
@@ -115,7 +129,7 @@ void PrintOnLeft(NODE* root, int level)
         {
             printf("   ");
         }
-        printf("%d (%d)\n", root->val, level);
+        printf("%d (%d)\n", root->status, level);
         PrintOnLeft(root->left, level + 1);
     }
 

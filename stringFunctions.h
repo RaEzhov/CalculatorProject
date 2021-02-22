@@ -5,8 +5,8 @@
 #define nameOfVariable 15
 #define countOfAvailableFunctions 11
 
-static char* availableFunctions[countOfAvailableFunctions] = {       "sin",  "cos",  "tan",  "arctg", "log",  "lg",   "ln",   "sqrt", "pow",  "abs", "exp"};  // "-"
-static char* availableFunctionsSymbols[countOfAvailableFunctions] ={ "!",    "@",    "#",    "№",     "$",    "%",    "&",    "?",    "_",    ":",   "\\"}; // "~"
+static char* availableFunctions[countOfAvailableFunctions] = {       "sin",  "cos",  "tan",  "arctg", "log",  "lg",   "ln",   "sqrt", "round",  "abs", "exp"};  // "-"
+static char* availableFunctionsSymbols[countOfAvailableFunctions] ={ "!",    "@",    "#",    "|",     "$",    "%",    "&",    "?",    "_",    ":",   "\\"}; // "~"
 
 
 void strclear(char str[]);

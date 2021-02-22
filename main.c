@@ -56,7 +56,7 @@ EXPNODE* rpn(EXPNODE* expression) {
                     } else {
                         while (priority(sign) >= priority(expression->sign) && stackOperations) {
                             pushToStack(&stackResult, popFromStack(&stackOperations));
-                            if (stackOperations->status == 1){
+                            if (stackOperations && stackOperations->status == 1){
                                 sign = stackOperations->sign;
                             } else {
                                 sign = stackOperations->bracket;
@@ -136,6 +136,111 @@ EXPNODE* makeListFromExpression(char* expression, VARNODE* variables) {
     return list;
 }
 
+BRANCH* makeTree(EXPNODE** topStackResult){
+    BRANCH * root = NULL;
+    while (*topStackResult){
+        EXPNODE expTemp = popFromStack(topStackResult);
+        BRANCH temp = {expTemp.status, expTemp.sign, expTemp.number, expTemp.function, NULL, NULL, NULL};
+        while (temp.status == 0){
+            while(root->status != 4){
+                root = root->parent;
+            }
+            if ((*root).parent){
+                root = root->parent;
+            }
+            if (!(*topStackResult)){
+                return root;
+            }
+            expTemp = popFromStack(topStackResult);
+            temp.status = expTemp.status;
+            temp.sign = expTemp.sign;
+            temp.number = expTemp.number;
+            temp.function = expTemp.function;
+        }
+        addToTree(&root,temp);
+    }
+    return root;
+}
+
+double calculateSymbol(double left, double right, char status, char action){
+    if(status == 1) {
+        switch (action) {
+            case '+':
+                return left + right;
+            case '-':
+                return left - right;
+            case '*':
+                return left * right;
+            case '/':
+                return left / right;
+            case '^':
+                return pow(left, right);
+            default:
+                exit(-10);
+        }
+    }
+    if(status == 4){
+        switch (action){
+            case '!':
+                return sin(right);
+            case '@':
+                return cos(right);
+            case '#':
+                return tan(right);
+            case '|':
+                return atan(right);
+            case '$':
+                return log2(right);
+            case '%':
+                return log10(right);
+            case '&':
+                return log(right);
+            case '?':
+                return sqrt(right);
+            case '_':
+                return round(right);
+            case ':':
+                return fabs(right);
+            case '\\':
+                return exp(right);
+            case '~':
+                return (-right);
+            default:
+                exit(-10);
+        }
+    }
+    exit(-10);
+}
+
+double treeCalculate(BRANCH* tree){
+    if (tree->status == 4) {
+        if (tree->right->status != 2) {
+            treeCalculate(tree->right);
+        }
+        tree->number = calculateSymbol(0, tree->right->number, 4, tree->function);
+        tree->status = 2;
+        free(tree->right);
+        tree->right = NULL;
+    }
+    if (tree->status == 1){
+        if (tree->right->status != 2){
+            treeCalculate(tree->right);
+        }
+        if (tree->left->status != 2){
+            treeCalculate(tree->left);
+        }
+        tree->number = calculateSymbol(tree->left->number, tree->right->number, 1, tree->sign);
+        tree->status = 2;
+        free(tree->right);
+        free(tree->left);
+        tree->right = NULL;
+        tree->left = NULL;
+    }
+    if (tree->parent == NULL && tree->status == 2) {
+        return tree->number;
+    }
+}
+
 void printList(EXPNODE* list){
     while(list) {
         switch (list->status) {
@@ -179,31 +284,37 @@ int main() {
     char variableTime[nameOfVariable] = {0};
     char expressionTime[expressionLength] = {0};
 
-    VARNODE *variables = NULL;
+    VARNODE* variables = NULL;
     initConstants(&variables);
-    EXPNODE *expressionList = NULL;
-    EXPNODE *stackResult = NULL;
-    for (int i = counter; i > 0; i--) {
-        sscanf(inputData.input[i], "%s = ", variableTime);
-        strcpy(expressionTime,inputData.input[i] + strlen(variableTime) + 3);
+    EXPNODE* expressionList = NULL;
+    EXPNODE* stackResult = NULL;
+    BRANCH* tree = NULL;
+    double resultValue = 0;
+    for (int i = counter; i >= 0; i--) {
+        if( i > 0) {
+            sscanf(inputData.input[i], "%s = ", variableTime);
+            strcpy(expressionTime, inputData.input[i] + strlen(variableTime) + 3);
+        } else {
+            strcpy(expressionTime, inputData.input[i]);
+        }
         strPrepare(expressionTime);
         expressionList = makeListFromExpression(expressionTime, variables); //make expression list from expressionTime // replace variables with their values
         stackResult = rpn(expressionList); //call rpn with expression list
-        printList(stackResult);
-        printf("\n");
-        printList(expressionList);
-        printf("\n");
-        //call makeTree with stackResult from rpn
-        //call treeCalculate with tree
-        addToVariableList(&variables,variableTime,0);//push variable with treeCalculate result
+        tree = makeTree(&stackResult);//call makeTree with stackResult from rpn
+        while(tree->parent){
+            tree = tree->parent;
+        }
+        resultValue = treeCalculate(tree);//call treeCalculate with tree
+        addToVariableList(&variables,variableTime,resultValue);//push variable with treeCalculate result
         clearList(stackResult);
         stackResult = NULL;
         clearList(expressionList);
         expressionList = NULL;
         strclear(expressionTime);
         strclear(variableTime);
+        deleteTree(tree);
     }
-    //calculate expression in input[0]
+    printf("Expression value: %.5lf\n", resultValue);
     clearVarList(variables);
     clearList(expressionList);
     fclose(data);
