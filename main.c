@@ -54,12 +54,14 @@ EXPNODE* rpn(EXPNODE* expression) {
                     if (priority(sign) < priority(expression->sign)) {
                         pushToStack(&stackOperations, *expression);
                     } else {
-                        while (priority(sign) >= priority(expression->sign) && stackOperations) {
+                        while ( stackOperations && priority(sign) >= priority(expression->sign)) {
                             pushToStack(&stackResult, popFromStack(&stackOperations));
-                            if (stackOperations && stackOperations->status == 1){
-                                sign = stackOperations->sign;
-                            } else {
-                                sign = stackOperations->bracket;
+                            if (stackOperations) {
+                                if (stackOperations->status == 1) {
+                                    sign = stackOperations->sign;
+                                } else {
+                                    sign = stackOperations->bracket;
+                                }
                             }
                         }
                         pushToStack(&stackOperations, *expression);
@@ -275,7 +277,8 @@ void printList(EXPNODE* list){
 }
 
 int main() {
-    FILE *data = fopen("data.txt", "r");
+    FILE *data = fopen("1.txt", "r");
+
     struct data inputData = {{0}, 0};
 
     inputData.top = fileReading(data, inputData.input);

@@ -1,7 +1,7 @@
 #ifndef STRINGFUNCTIONS_H
 #define STRINGFUNCTIONS_H
 
-#define expressionLength 100
+#define expressionLength 200
 #define nameOfVariable 15
 #define countOfAvailableFunctions 11
 
