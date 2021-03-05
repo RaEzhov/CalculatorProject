@@ -277,7 +277,7 @@ void printList(EXPNODE* list){
 }
 
 int main() {
-    FILE *data = fopen("1.txt", "r");
+    FILE *data = fopen("3.txt", "r");
 
     struct data inputData = {{0}, 0};
 
@@ -317,7 +317,7 @@ int main() {
         strclear(variableTime);
         deleteTree(tree);
     }
-    printf("Expression value: %.5lf\n", resultValue);
+    printf("Expression value: %.2lf\n", resultValue);
     clearVarList(variables);
     clearList(expressionList);
     fclose(data);
