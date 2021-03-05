@@ -13,8 +13,6 @@ typedef struct branch
 
 void addToTree(BRANCH** root, BRANCH node);
 BRANCH* deleteTree(BRANCH * root);
-//BRANCH* DeleteFromTree(BRANCH * root, int val);
-//void PrintSym(BRANCH* root);
-void PrintOnLeft(BRANCH* root, int level);
+
 
 #endif //TREE_H

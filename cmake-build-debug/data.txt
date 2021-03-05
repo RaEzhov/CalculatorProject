@@ -1,8 +1,8 @@
-((7)*PI*alpha*len)
-alpha = sqrt(   PI* len/ (s1+ s2) )
-s1 = cos (arctg   (S11   )* arctg  (S22) )
-s2 = (   sin( S11*   S22 ))   ^2
+ln(alpha*cos(s1+s2)-sqrt(S11*S22))+v0-len
+alpha = sqrt(3.141*len/s2)
+s1 = cos(arctg(S11)*arctg(S22))
+s2 = (sin(23*80))^2
 len = 191.76
 v0 = 299.799
-S11 =  ( - 0.01 ) -      0.92
-S22 = sin( 7* exp(4 -2 )   +3)
+S11 =  (-0.01)-0.92
+S22 = sin(7*exp(4-2)+3)

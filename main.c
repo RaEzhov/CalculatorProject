@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <complex.h>
 #include <math.h>
 #include "tree.h"
 #include "linkedList.h"
@@ -243,41 +242,8 @@ double treeCalculate(BRANCH* tree){
     }
 }
 
-void printList(EXPNODE* list){
-    while(list) {
-        switch (list->status) {
-            case 0:
-                printf(" ");
-                break;
-            case 1:
-                printf("%c", list->sign);
-                break;
-            case 2:
-                printf("%.2lf",list->number);
-                break;
-            case 3:
-                printf("%c", list->bracket);
-                break;
-            case 4:
-                if (list->function == '~') {
-                    printf("-");
-                } else{
-                    int i = 0;
-                    while (list->function != availableFunctionsSymbols[i][0]){
-                        i++;
-                    }
-                    printf("%s", availableFunctions[i]);
-                }
-                break;
-            default:
-                exit(-8);
-        }
-        list = list->pointer;
-    }
-}
-
 int main() {
-    FILE *data = fopen("3.txt", "r");
+    FILE *data = fopen("data.txt", "r");
 
     struct data inputData = {{0}, 0};
 
