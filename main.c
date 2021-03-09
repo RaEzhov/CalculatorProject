@@ -173,6 +173,8 @@ double calculateSymbol(double left, double right, char status, char action){
             case '*':
                 return left * right;
             case '/':
+                if (right == 0)
+                    exit(-20);
                 return left / right;
             case '^':
                 return pow(left, right);

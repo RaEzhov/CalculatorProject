@@ -1,4 +1,4 @@
-ln(alpha*cos(s1+s2)-sqrt(S11*S22))+v0-len
+ln(alpha*cos(s1+s2)-sqrt(S11*S22))+v0-len/0
 alpha = sqrt(3.141*len/s2)
 s1 = cos(arctg(S11)*arctg(S22))
 s2 = (sin(23*80))^2
